@@ -20,8 +20,18 @@ function criarPixelBoard(board, linhasTotais, colunasTotais) {
 
 window.onload = function () {
   // Pegar elementos
-  const pixelBoard = document.getElementById('pixel-board');
+  const quadroPixel = document.getElementById('pixel-board');
+  const cores = document.getElementsByClassName('color');
 
   // Criar pixel board
-  criarPixelBoard(pixelBoard, 5, 5);
+  criarPixelBoard(quadroPixel, 5, 5);
+
+  // Adiciona opcao de selecionar a cor
+  function selecionaCor(event) {
+    document.querySelector('.color.selected').classList.remove('selected');
+    event.target.classList.add('selected');
+  }
+  for (let i = 0; i < cores.length; i += 1) {
+    cores[i].addEventListener('click', selecionaCor);
+  }
 }
