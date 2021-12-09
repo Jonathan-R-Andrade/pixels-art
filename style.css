@@ -7,7 +7,7 @@
 }
 
 .color:nth-child(1) {
-  background-color: blue;
+  background-color: black;
 }
 
 .color:nth-child(2) {
@@ -19,5 +19,5 @@
 }
 
 .color:nth-child(4) {
-  background-color: black;
+  background-color: blue;
 }
