@@ -67,18 +67,32 @@ function alterarTamanhoQuadro() {
   }
 }
 
+// Gerar cor aleatória
+function gerarCor() {
+  const r = Math.round(Math.random() * 255);
+  const g = Math.round(Math.random() * 255);
+  const b = Math.round(Math.random() * 255);
+  let cor = 'rgb('.concat(r).concat(', ');
+  cor = cor.concat(g).concat(', ');
+  cor = cor.concat(b).concat(')');
+  return cor;
+}
+
 // Trabalhar com os elementos após a página ser carregada
 function trabalharComElementos() {
   // Pegar elementos
   const cores = document.getElementsByClassName('color');
   const botaoLimpar = document.getElementById('clear-board');
   const botaoVQV = document.getElementById('generate-board');
-
   // Criar pixel board
   criarPixelBoard(5, 5);
   // Adiciona opcao de selecionar a cor
   for (let i = 0; i < cores.length; i += 1) {
     cores[i].addEventListener('click', selecionaCor);
+  }
+  // Define cor aleatória na paleta de cores
+  for (let i = 1; i < cores.length; i += 1) {
+    cores[i].style.backgroundColor = gerarCor();
   }
   // Adiciona opcao de limpar o quadro
   botaoLimpar.addEventListener('click', limparQuadro);
