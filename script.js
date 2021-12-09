@@ -54,10 +54,15 @@ function limparQuadro() {
 // Altera tamanho do quadro
 function alterarTamanhoQuadro() {
   const boardSize = document.getElementById('board-size');
-  const tamanho = parseInt(boardSize.value, 10);
+  let tamanho = parseInt(boardSize.value, 10);
   if (tamanho.toString() === 'NaN') {
     window.alert('Board inválido!');
   } else {
+    if (tamanho < 5) {
+      tamanho = 5;
+    } else if (tamanho > 50) {
+      tamanho = 50;
+    }
     criarPixelBoard(tamanho, tamanho);
   }
 }
