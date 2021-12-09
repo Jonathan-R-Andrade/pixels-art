@@ -22,6 +22,7 @@ window.onload = function () {
   // Pegar elementos
   const quadroPixel = document.getElementById('pixel-board');
   const cores = document.getElementsByClassName('color');
+  const pixels = document.getElementsByClassName('pixel');
 
   // Criar pixel board
   criarPixelBoard(quadroPixel, 5, 5);
@@ -33,5 +34,15 @@ window.onload = function () {
   }
   for (let i = 0; i < cores.length; i += 1) {
     cores[i].addEventListener('click', selecionaCor);
+  }
+
+  // Adiciona opcao de mudar a cor do pixel
+  function mudarCorPixel(event) {
+    const corSelecionada = document.querySelector('.color.selected');
+    const cor = window.getComputedStyle(corSelecionada, null).backgroundColor;
+    event.target.style.backgroundColor = cor;
+  }
+  for (let i = 0; i < pixels.length; i += 1) {
+    pixels[i].addEventListener('click', mudarCorPixel);
   }
 }
