@@ -4,12 +4,27 @@
   font-family: courier, sans-serif, arial;
 }
 
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+section {
+  margin: 20px auto;
+  width: max-content;
+}
+
 .color {
   display: inline-block;
   border: black solid 1px;
   width: 40px;
   height: 40px;
   cursor: pointer;
+  border-radius: 50%;
+}
+
+.selected {
+  border-radius: 0;
 }
 
 .color:nth-child( 1 ) {
@@ -32,6 +47,7 @@
   line-height: 0;
   border: black solid 1px;
   width: max-content;
+  margin: auto;
 }
 
 .pixel {
@@ -43,7 +59,7 @@
   cursor: pointer;
 }
 
-#clear-board {
+.button {
   padding: 5px;
   margin: 5px;
   cursor: pointer;
