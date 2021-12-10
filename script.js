@@ -22,6 +22,8 @@ function mudarCorPixel(event) {
   const corPixel = window.getComputedStyle(pixel, null).backgroundColor;
   if (corPixel === 'rgb(255, 255, 255)') {
     pixel.style.backgroundColor = cor;
+  } else if (corPixel !== cor) {
+    pixel.style.backgroundColor = cor;
   } else {
     pixel.style.backgroundColor = 'white';
   }
