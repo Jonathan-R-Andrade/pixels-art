@@ -69,7 +69,7 @@ function alterarTamanhoQuadro() {
 
 // Gerar cor aleatória
 function gerarCor() {
-  const r = Math.round(Math.random() * 255);
+  const r = Math.floor(Math.random() * 255);
   const g = Math.round(Math.random() * 255);
   const b = Math.round(Math.random() * 255);
   let cor = 'rgb('.concat(r).concat(', ');
