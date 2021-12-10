@@ -19,7 +19,12 @@ function mudarCorPixel(event) {
   const corSelecionada = document.querySelector('.color.selected');
   const cor = window.getComputedStyle(corSelecionada, null).backgroundColor;
   const pixel = event.target;
-  pixel.style.backgroundColor = cor;
+  const corPixel = window.getComputedStyle(pixel, null).backgroundColor;
+  if (corPixel === 'rgb(255, 255, 255)') {
+    pixel.style.backgroundColor = cor;
+  } else {
+    pixel.style.backgroundColor = 'white';
+  }
 }
 
 // Coloar linhas no quadro
