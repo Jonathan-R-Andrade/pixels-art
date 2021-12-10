@@ -1,4 +1,8 @@
 // Variáveis que serão usadas posteriormente
+let cores;
+let botaoLimpar;
+let botaoVQV;
+let boardSize;
 let pixels;
 let mouseClicado = false;
 
@@ -80,7 +84,6 @@ function limparQuadro() {
 
 // Altera tamanho do quadro
 function alterarTamanhoQuadro() {
-  const boardSize = document.getElementById('board-size');
   let tamanho = parseInt(boardSize.value, 10);
   if (tamanho.toString() === 'NaN') {
     window.alert('Board inválido!');
@@ -91,6 +94,13 @@ function alterarTamanhoQuadro() {
       tamanho = 50;
     }
     criarPixelBoard(tamanho, tamanho);
+  }
+}
+
+// Altera tamanho do quadro apertando enter
+function enterApertado(event) {
+  if (event.key === 'Enter') {
+    alterarTamanhoQuadro();
   }
 }
 
@@ -105,14 +115,8 @@ function gerarCor() {
   return cor;
 }
 
-// Trabalhar com os elementos após a página ser carregada
-function trabalharComElementos() {
-  // Pegar elementos
-  const cores = document.getElementsByClassName('color');
-  const botaoLimpar = document.getElementById('clear-board');
-  const botaoVQV = document.getElementById('generate-board');
-  // Criar pixel board
-  criarPixelBoard(5, 5);
+// Adicionar ouvintes
+function adicionaOuvintes() {
   // Adiciona opcao de selecionar a cor
   for (let i = 0; i < cores.length; i += 1) {
     cores[i].addEventListener('click', selecionaCor);
@@ -125,6 +129,21 @@ function trabalharComElementos() {
   botaoLimpar.addEventListener('click', limparQuadro);
   // Adiciona ouvinte para alterar o tamanho do quadro
   botaoVQV.addEventListener('click', alterarTamanhoQuadro);
+  // Adiciona ouvinte para alterar o tamanho do quadro quando apertar "Enter"
+  boardSize.addEventListener('keypress', enterApertado);
+}
+
+// Trabalhar com os elementos após a página ser carregada
+function trabalharComElementos() {
+  // Pegar elementos
+  cores = document.getElementsByClassName('color');
+  botaoLimpar = document.getElementById('clear-board');
+  botaoVQV = document.getElementById('generate-board');
+  boardSize = document.getElementById('board-size');
+  // Criar pixel board
+  criarPixelBoard(5, 5);
+  // Adicionar ouvintes
+  adicionaOuvintes();
 }
 
 window.onload = trabalharComElementos;
