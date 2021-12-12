@@ -4,7 +4,7 @@ let botaoLimpar;
 let botaoVQV;
 let boardSize;
 let pixels;
-let mouseClicado = false;
+let botaoMouseClicado = -1;
 
 // Fazer linhas do quadro
 function criarLinha(celulasTotais) {
@@ -22,31 +22,39 @@ function criarLinha(celulasTotais) {
 // Muda a cor do pixel clicado
 function mudarCorPixel(event) {
   if (event.button === 0) {
-    mouseClicado = true;
-    const corSelecionada = document.querySelector('.color.selected');
+    botaoMouseClicado = event.button;
+    const corSelecionada = document.querySelector('.selected');
     const cor = window.getComputedStyle(corSelecionada, null).backgroundColor;
     const pixel = event.target;
-    const corPixel = window.getComputedStyle(pixel, null).backgroundColor;
-    if (corPixel === 'rgb(255, 255, 255)') {
-      pixel.style.backgroundColor = cor;
-    } else if (corPixel !== cor) {
-      pixel.style.backgroundColor = cor;
-    } else {
-      pixel.style.backgroundColor = 'white';
-    }
+    pixel.style.backgroundColor = cor;
+  } else if (event.button === 2) {
+    botaoMouseClicado = event.button;
+    const pixel = event.target;
+    pixel.style.backgroundColor = 'white';
   }
 }
 
 // Muda a cor do pixel continuamente
 function mudarCorPixelContinuamente(event) {
-  if (mouseClicado) {
-    mudarCorPixel(event);
+  if (botaoMouseClicado === 0) {
+    const corSelecionada = document.querySelector('.selected');
+    const cor = window.getComputedStyle(corSelecionada, null).backgroundColor;
+    const pixel = event.target;
+    pixel.style.backgroundColor = cor;
+  } else if (botaoMouseClicado === 2) {
+    const pixel = event.target;
+    pixel.style.backgroundColor = 'white';
   }
 }
 
 // Desativa o click do mouse ao sair do quadro
 function desativarClick() {
-  mouseClicado = false;
+  botaoMouseClicado = -1;
+}
+
+// Desativa o menu de contexto
+function desativarMenuContexto(event) {
+  event.preventDefault();
 }
 
 // Coloar linhas no quadro
@@ -61,17 +69,17 @@ function criarPixelBoard(linhasTotais, colunasTotais) {
   pixels = document.getElementsByClassName('pixel');
   // Adiciona ouvinte para mudar a cor do pixel
   for (let i = 0; i < pixels.length; i += 1) {
+    pixels[i].addEventListener('contextmenu', desativarMenuContexto);
     pixels[i].addEventListener('mousedown', mudarCorPixel);
     pixels[i].addEventListener('mouseover', mudarCorPixelContinuamente);
   }
   // Adiciona ouvinte para desativar o click do mouse
-  quadroPixel.addEventListener('mouseleave', desativarClick);
   window.addEventListener('mouseup', desativarClick);
 }
 
 // Seleciona a cor clicada
 function selecionaCor(event) {
-  document.querySelector('.color.selected').classList.remove('selected');
+  document.querySelector('.selected').classList.remove('selected');
   event.target.classList.add('selected');
 }
 
