@@ -6,10 +6,8 @@ let botaoBorracha;
 let boardSize;
 let pixels;
 let botaoMouseClicado = -1;
-
 // Flag de controle da borracha
 let borrachaSelecionada = false;
-
 // Última cor selecionada
 let ultimaCorSelecionada;
 
@@ -32,14 +30,19 @@ function pintarPixel(pixel, cor) {
   pixelPintado.style.backgroundColor = cor;
 }
 
-// Pegar a cor selecionada
-function obterCorSelecionada() {
+// Retorna a cor selecionada na paleta
+function obterCorNaPaleta() {
+  const corSelecionada = document.querySelector('.selected');
+  return window.getComputedStyle(corSelecionada, null).backgroundColor;
+}
+
+// Retorna a cor da tinta ou borracha caso selecionada
+function obterCorDaTintaOuBorracha() {
   let cor;
   if (borrachaSelecionada) {
     cor = 'white';
   } else {
-    const corSelecionada = document.querySelector('.selected');
-    cor = window.getComputedStyle(corSelecionada, null).backgroundColor;
+    cor = obterCorNaPaleta();
   }
   return cor;
 }
@@ -48,7 +51,7 @@ function obterCorSelecionada() {
 function mudarCorPixel(event) {
   if (event.button === 0) {
     botaoMouseClicado = event.button;
-    pintarPixel(event.target, obterCorSelecionada());
+    pintarPixel(event.target, obterCorDaTintaOuBorracha());
   } else if (event.button === 2) {
     botaoMouseClicado = event.button;
     pintarPixel(event.target, 'white');
@@ -58,7 +61,7 @@ function mudarCorPixel(event) {
 // Muda a cor do pixel continuamente
 function mudarCorPixelContinuamente(event) {
   if (botaoMouseClicado === 0) {
-    pintarPixel(event.target, obterCorSelecionada());
+    pintarPixel(event.target, obterCorDaTintaOuBorracha());
   } else if (botaoMouseClicado === 2) {
     pintarPixel(event.target, 'white');
   }
@@ -166,24 +169,51 @@ function enterApertado(event) {
 
 // Gerar cor aleatória
 function gerarCor() {
-  const r = Math.floor(Math.random() * 255);
-  const g = Math.round(Math.random() * 255);
-  const b = Math.round(Math.random() * 255);
-  let cor = 'rgb('.concat(r).concat(', ');
-  cor = cor.concat(g).concat(', ');
-  cor = cor.concat(b).concat(')');
+  const rgb = [];
+  rgb.push(Math.round(Math.random() * 255));
+  rgb.push(Math.round(Math.random() * 255));
+  rgb.push(Math.round(Math.random() * 255));
+  // Se a cor gerada for 100% branca altera para outra cor que não é branca
+  if (rgb[0] === 255 && rgb[1] === 255 && rgb[2] === 255) {
+    // Escolhe aleatóriamente se vai alterar a cor red, green ou blue
+    const i = Math.round(Math.random() * 2);
+    // O floor vai arredondar para baixo evitando o número 255
+    rgb[i] = Math.floor(Math.random() * 255);
+  }
+  // Define uma string com a cor rgb
+  let cor = 'rgb('.concat(rgb[0]).concat(', ');
+  cor = cor.concat(rgb[1]).concat(', ');
+  cor = cor.concat(rgb[2]).concat(')');
   return cor;
+}
+
+// Definir cores aleatórias na paleta de cores
+function definirCoresNaPaleta() {
+  // Armazena as cores geradas para verificar se repetem
+  const coresDefinidas = [];
+  // Pega a cor selecionada na paleta
+  const primeiraCor = obterCorNaPaleta();
+  // Coloca a cor no array para não repetir
+  coresDefinidas.push(primeiraCor);
+  // Inicia do 1 porque a primeira cor(índice 0) é padrão
+  for (let i = 1; i < cores.length; i += 1) {
+    let cor = null;
+    // Enquanto a cor for repetida tentar de novo
+    do {
+      cor = gerarCor();
+    } while (coresDefinidas.indexOf(cor) !== -1);
+    // Coloca a cor no array para não repetir
+    coresDefinidas.push(cor);
+    // Define a cor na paleta
+    cores[i].style.backgroundColor = cor;
+  }
 }
 
 // Adicionar ouvintes
 function adicionaOuvintes() {
-  // Adiciona opcao de selecionar a cor
+  // Adiciona ouvinte para selecionar a cor na paleta
   for (let i = 0; i < cores.length; i += 1) {
     cores[i].addEventListener('click', selecionaCor);
-  }
-  // Define cor aleatória na paleta de cores
-  for (let i = 1; i < cores.length; i += 1) {
-    cores[i].style.backgroundColor = gerarCor();
   }
   // Adiciona ouvinte para limpar o quadro
   botaoLimpar.addEventListener('click', limparQuadro);
@@ -195,18 +225,25 @@ function adicionaOuvintes() {
   botaoBorracha.addEventListener('click', borrachaClicada);
 }
 
-// Trabalhar com os elementos após a página ser carregada
-function trabalharComElementos() {
-  // Pegar elementos
+// Obter elementos da página
+function obterElementos() {
   cores = document.getElementsByClassName('color');
   botaoLimpar = document.getElementById('clear-board');
   botaoVQV = document.getElementById('generate-board');
   botaoBorracha = document.querySelector('.eraser');
   boardSize = document.getElementById('board-size');
+}
+
+// Executar o código após a página ser carregada
+function executarCodigo() {
+  // Pegar elementos
+  obterElementos();
   // Criar pixel board
   criarPixelBoard(5, 5);
   // Adicionar ouvintes
   adicionaOuvintes();
+  // Definer cores da paleta
+  definirCoresNaPaleta();
 }
 
-window.onload = trabalharComElementos;
+window.onload = executarCodigo;
