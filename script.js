@@ -2,9 +2,16 @@
 let cores;
 let botaoLimpar;
 let botaoVQV;
+let botaoBorracha;
 let boardSize;
 let pixels;
 let botaoMouseClicado = -1;
+
+// Flag de controle da borracha
+let borrachaSelecionada = false;
+
+// Última cor selecionada
+let ultimaCorSelecionada;
 
 // Fazer linhas do quadro
 function criarLinha(celulasTotais) {
@@ -19,35 +26,45 @@ function criarLinha(celulasTotais) {
   return linha;
 }
 
+// Pintar pixel
+function pintarPixel(pixel, cor) {
+  const pixelPintado = pixel;
+  pixelPintado.style.backgroundColor = cor;
+}
+
+// Pegar a cor selecionada
+function obterCorSelecionada() {
+  let cor;
+  if (borrachaSelecionada) {
+    cor = 'white';
+  } else {
+    const corSelecionada = document.querySelector('.selected');
+    cor = window.getComputedStyle(corSelecionada, null).backgroundColor;
+  }
+  return cor;
+}
+
 // Muda a cor do pixel clicado
 function mudarCorPixel(event) {
   if (event.button === 0) {
     botaoMouseClicado = event.button;
-    const corSelecionada = document.querySelector('.selected');
-    const cor = window.getComputedStyle(corSelecionada, null).backgroundColor;
-    const pixel = event.target;
-    pixel.style.backgroundColor = cor;
+    pintarPixel(event.target, obterCorSelecionada());
   } else if (event.button === 2) {
     botaoMouseClicado = event.button;
-    const pixel = event.target;
-    pixel.style.backgroundColor = 'white';
+    pintarPixel(event.target, 'white');
   }
 }
 
 // Muda a cor do pixel continuamente
 function mudarCorPixelContinuamente(event) {
   if (botaoMouseClicado === 0) {
-    const corSelecionada = document.querySelector('.selected');
-    const cor = window.getComputedStyle(corSelecionada, null).backgroundColor;
-    const pixel = event.target;
-    pixel.style.backgroundColor = cor;
+    pintarPixel(event.target, obterCorSelecionada());
   } else if (botaoMouseClicado === 2) {
-    const pixel = event.target;
-    pixel.style.backgroundColor = 'white';
+    pintarPixel(event.target, 'white');
   }
 }
 
-// Desativa o click do mouse ao sair do quadro
+// Desativa o click do mouse
 function desativarClick() {
   botaoMouseClicado = -1;
 }
@@ -77,9 +94,29 @@ function criarPixelBoard(linhasTotais, colunasTotais) {
   window.addEventListener('mouseup', desativarClick);
 }
 
-// Seleciona a cor clicada
+// Quando chamada remove a classe CSS selected do elemento que a possui
+function removerSelected() {
+  const selected = document.querySelector('.selected');
+  if (selected !== null) {
+    selected.classList.remove('selected');
+  }
+}
+
+// Ativa ou desativa o flag da borracha
+function ativaDesativaBorracha(ativar) {
+  if (ativar) {
+    borrachaSelecionada = true;
+    botaoBorracha.classList.add('eraserActive');
+  } else {
+    borrachaSelecionada = false;
+    botaoBorracha.classList.remove('eraserActive');
+  }
+}
+
+// Seleciona a cor clicada e desativa a borracha
 function selecionaCor(event) {
-  document.querySelector('.selected').classList.remove('selected');
+  ativaDesativaBorracha(false);
+  removerSelected();
   event.target.classList.add('selected');
 }
 
@@ -87,6 +124,21 @@ function selecionaCor(event) {
 function limparQuadro() {
   for (let i = 0; i < pixels.length; i += 1) {
     pixels[i].style.backgroundColor = 'white';
+  }
+}
+
+// Ao clicar no botão borracha altera sua aparecia e a cor selecionada
+function borrachaClicada() {
+  if (borrachaSelecionada) {
+    ativaDesativaBorracha(false);
+    // Seleciona a última cor
+    ultimaCorSelecionada.classList.add('selected');
+  } else {
+    ativaDesativaBorracha(true);
+    // Pega a última cor para selecioná-la novamento quando desativar a borracha
+    ultimaCorSelecionada = document.querySelector('.selected');
+    // Desseleciona a cor selecionada
+    removerSelected();
   }
 }
 
@@ -139,6 +191,8 @@ function adicionaOuvintes() {
   botaoVQV.addEventListener('click', alterarTamanhoQuadro);
   // Adiciona ouvinte para alterar o tamanho do quadro quando apertar "Enter"
   boardSize.addEventListener('keypress', enterApertado);
+  // Adiciona ouvinte para ativar a borracha
+  botaoBorracha.addEventListener('click', borrachaClicada);
 }
 
 // Trabalhar com os elementos após a página ser carregada
@@ -147,6 +201,7 @@ function trabalharComElementos() {
   cores = document.getElementsByClassName('color');
   botaoLimpar = document.getElementById('clear-board');
   botaoVQV = document.getElementById('generate-board');
+  botaoBorracha = document.querySelector('.eraser');
   boardSize = document.getElementById('board-size');
   // Criar pixel board
   criarPixelBoard(5, 5);
