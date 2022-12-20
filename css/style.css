@@ -1,0 +1,136 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif, arial;
+}
+
+body {
+  background-color: grey;
+}
+
+#title {
+  text-align: center;
+  padding: 5px;
+  background-color: red;
+  color: white;
+}
+
+#color-palette {
+  padding: 8px 5px 5px;
+  text-align: center;
+  background-color: rgb(0, 180, 0);
+  user-select: none;
+}
+
+.color {
+  display: inline-block;
+  border: black solid 1px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.color:nth-child( 1 ) {
+  background-color: black;
+}
+
+.color:nth-child( 2 ) {
+  background-color: red;
+}
+
+.color:nth-child( 3 ) {
+  background-color: green;
+}
+
+.color:nth-child( 4 ) {
+  background-color: blue;
+}
+
+.selected {
+  border-radius: 0;
+}
+
+#board-options {
+  padding: 5px;
+  text-align: center;
+  background-color: blue;
+}
+
+#board-size {
+  padding: 4px 8px;
+  margin: 0 5px;
+  border: 2px solid white;
+  outline-style: none;
+  border-radius: 10px;
+}
+
+#board-size:focus {
+  border-color: black;
+}
+
+.button {
+  font-family: sans-serif, arial;
+  font-weight: 900;
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.8);
+  transition: box-shadow 100ms linear, transform 100ms linear;
+  user-select: none;
+}
+
+.button:active {
+  box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.8);
+  transform: translate(1px, 1px);
+}
+
+#generate-board {
+  background-color: rgb(0, 255, 85);
+}
+
+#generate-board:hover {
+  background-color: rgb(0, 200, 60);
+}
+
+#clear-board {
+  background-color: red;
+  color: white;
+}
+
+#clear-board:hover {
+  background-color: rgb(210, 0, 0);
+}
+
+.eraser {
+  background-color: white;
+}
+
+.eraser:hover {
+  background-color: rgb(200, 200, 200);
+}
+
+.eraserActive {
+  background-color: rgb(200, 200, 200);
+  box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.8);
+  transform: translate(1px, 1px);
+}
+
+#pixel-board {
+  line-height: 0;
+  border: black solid 1px;
+  width: max-content;
+  margin: 20px auto;
+  user-select: none;
+}
+
+.pixel {
+  display: inline-block;
+  background-color: white;
+  border: black solid 1px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
